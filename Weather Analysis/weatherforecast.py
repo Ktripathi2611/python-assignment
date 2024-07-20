@@ -17,7 +17,7 @@ st.set_page_config(
 
 
 st.title("Weather Forecast :sun_small_cloud:")
-st.markdown('<style>div.block-container{padding-top:3rem;}</style>', unsafe_allow_html=True) 
+st.markdown('<style>div.block-container{padding-top:4rem;}</style>', unsafe_allow_html=True) 
 
 
 #to take the file from the user  
@@ -27,7 +27,7 @@ if f1 is not None:
     st.write(filename)
     df =pd.read_csv(filename)
 else: 
-    filename = r"C:\Users\Kushal Tripathi\python\Weather Analysis\TestDashBoard\CleanedWeatherData.csv"
+    filename = "C:/Users/Kushal Tripathi/python/Weather Analysis/archive/GlobalWeatherRepository.csv"
 
 df = pd.read_csv(filename)
 
@@ -44,7 +44,6 @@ if selected == "Home":
     # Display content for the Home page
     st.write("This is the Home page content.")
 elif selected == "Project":
-    
     # Display content for the Project page
     st.write("This is the Project page content.")
 elif selected == "Contact":
@@ -56,7 +55,7 @@ elif selected == "Contact":
 
 
 #this is a block of code to pick date (date picker between the range )
-st.header("select the country(s) ") 
+
 col1 , col2=st.columns((2))
 df["last_updated"]=pd.to_datetime(df["last_updated"])
 #gett minmmun and maxmin the date s
@@ -147,7 +146,7 @@ plt.xlabel("Location")
 plt.ylabel(f"Temperature (°{temperature_column.upper()})")
 plt.title(f"Average {temperature_column.upper()} Temperatures in Different Locations")
 plt.xticks(rotation=45)
-plt.grid()
+plt.grid(axis='y', linestyle='--', alpha=0.7)
 plt.tight_layout()
 plt.show()
 
@@ -163,6 +162,8 @@ def create_graph(df, x_axis, y_axis, chart_type="histogram"):
     # Use scatter plot for other x-axis data (assuming numerical)
     fig = px.histogram(df, x=x_axis, y=y_axis, title=f"{y_axis} vs {x_axis}")
   return fig
+
+
 def display_graphs(df):
   
   with col1:

@@ -9,6 +9,8 @@ from streamlit_option_menu import option_menu
 from streamlit.elements import html
 warnings.filterwarnings("ignore")
 
+
+#page configuration  and other infos 
 st.set_page_config(
     page_title="Weather Forecast",
     page_icon=":sun_small_cloud:",
@@ -56,7 +58,7 @@ elif selected == "Contact":
 
 
 #this is a block of code to pick date (date picker between the range )
-st.header("select the country(s) ") 
+st.header("select the starting date and ending date from here ") 
 col1 , col2=st.columns((2))
 df["last_updated"]=pd.to_datetime(df["last_updated"])
 #gett minmmun and maxmin the date s
@@ -67,8 +69,11 @@ with col1:
 with col2:
     Date2=pd.to_datetime(st.date_input("end  date :date: ",enddate))
 df=df[(df["last_updated"]>=Date1)& (df["last_updated"]<=Date2)].copy()    
+
+
+#display of infos from here 
     
-st.header("Weather Data Analysis")
+st.header("Select the coutry(ies) and there weather condition ")
 country_options = df["country"].unique()
 country_selection = st.multiselect("Select Country(ies):", country_options)
 filtered_df = df.copy() 
@@ -124,6 +129,9 @@ fig.update_layout(title="Cloud Cover Distribution")  # Update title
 
 # Display the second chart
 st.plotly_chart(fig, use_container_width=True, height=200)
+# Create container for the pie chart
+
+
 
 
 
@@ -154,6 +162,19 @@ plt.show()
 
 
 
+
+
+if not filtered_df.empty:
+    st.subheader("Filtered Weather Data detailed ")
+    st.write(filtered_df)  # Display the filtered DataFrame
+else:
+    # No data message (optional)
+    if not country_selection:
+        st.write("Please select one or more countries to view weather data.")
+    else:
+        st.write("No data found based on your filter selections.")
+
+
 def create_graph(df, x_axis, y_axis, chart_type="histogram"):
   
   if x_axis == "country":
@@ -165,8 +186,8 @@ def create_graph(df, x_axis, y_axis, chart_type="histogram"):
   return fig
 def display_graphs(df):
   
-  with col1:
-    st.subheader("Data Visualization")
+#   with col1:
+    st.subheader("Data Visualization based on  user selection ")
     x_axis_options = ["country"] + [col for col in df.columns if col != "country"]
     y_axis_options = df.columns
 
@@ -177,18 +198,4 @@ def display_graphs(df):
       fig = create_graph(df.copy(), selected_x_axis, selected_y_axis)
       st.plotly_chart(fig, use_container_width=True)
 display_graphs(df)
-
-
-if not filtered_df.empty:
-    st.subheader("Filtered Weather Data")
-    st.write(filtered_df)  # Display the filtered DataFrame
-else:
-    # No data message (optional)
-    if not country_selection:
-        st.write("Please select one or more countries to view weather data.")
-    else:
-        st.write("No data found based on your filter selections.")
-
-
-
 
